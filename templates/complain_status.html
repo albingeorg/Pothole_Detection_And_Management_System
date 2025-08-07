@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Complaint Status</title>
+    <link rel="stylesheet" href="static\uploads\css\style.css">
+</head>
+<body>
+<nav>
+    <ul>
+        <li><a href="{{ url_for('index') }}">Home</a></li>
+        <li><a href="#">About</a></li>
+        <li><a href="{{ url_for('user_dashboard') }}">Back</a></li>
+        <li><a href="{{ url_for('logout') }}">Logout</a></li>
+    </ul>
+</nav>
+
+<main>
+    <h2>Your Complaints</h2>
+    {% if complaints %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Location</th>
+                    <th>Date</th>
+                    <th>Message</th>
+                    <th>Status</th>
+                    <th>Verify</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for c in complaints %}
+                <tr>
+                    <td>{{ c.location or '--' }}</td>
+                    <td>{{ c.date or '--' }}</td>
+                    <td>{{ c.message }}</td>
+                    <td>{{ c.status }}</td>
+                    <td>
+                        {% if c.status == 'pothole fixed' and not c.user_verified %}
+                            <form method="POST" action="{{ url_for('verify_complaint', id=c.id) }}">
+                                <select name="verification" required>
+                                    <option value="yes">Yes Fixed</option>
+                                    <option value="no">Not Fixed</option>
+                                </select>
+                                <button type="submit">Submit</button>
+                            </form>
+                        {% elif c.user_verified %}
+                            Verified: {{ c.user_verified }}
+                        {% else %}
+                            --
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>No complaints found.</p>
+    {% endif %}
+</main>
+</body>
+</html>

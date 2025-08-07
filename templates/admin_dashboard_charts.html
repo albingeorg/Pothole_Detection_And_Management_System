@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Analytics Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="static/uploads/css/style.css">
+</head>
+<body>
+<nav>
+    <ul>
+        <li><a href="{{ url_for('index') }}">Home</a></li>
+        <li><a href="#">About</a></li>
+        <li><a href="{{ url_for('admin_dashboard') }}">Back</a></li>
+        <li><a href="{{ url_for('logout') }}">Logout</a></li>
+    </ul>
+</nav>
+
+<main>
+    <h2>Complaint Analytics - {{ session['jurisdiction'] }}</h2>
+
+    <canvas id="statusChart" width="400" height="200"></canvas>
+    <canvas id="monthChart" width="400" height="200"></canvas>
+    <canvas id="verificationChart" width="400" height="200"></canvas>
+
+    <script>
+        const statusCtx = document.getElementById('statusChart').getContext('2d');
+        const monthCtx = document.getElementById('monthChart').getContext('2d');
+        const verificationCtx = document.getElementById('verificationChart').getContext('2d');
+
+        new Chart(statusCtx, {
+            type: 'bar',
+            data: {
+                labels: {{ status_labels | tojson | safe }},
+                datasets: [{
+                    label: 'Complaints by Status',
+                    data: {{ status_counts | tojson | safe }},
+                    backgroundColor: ['#f39c12', '#27ae60']
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                }
+            }
+        });
+
+        new Chart(monthCtx, {
+            type: 'line',
+            data: {
+                labels: {{ month_labels | tojson | safe }},
+                datasets: [{
+                    label: 'Complaints per Month',
+                    data: {{ month_counts | tojson | safe }},
+                    borderColor: '#2980b9',
+                    backgroundColor: 'rgba(41, 128, 185, 0.1)',
+                    fill: true,
+                    tension: 0.3
+                }]
+            },
+            options: {
+                responsive: true
+            }
+        });
+
+        new Chart(verificationCtx, {
+            type: 'pie',
+            data: {
+                labels: ['Verified Fixed', 'Not Verified', 'Verified Not Fixed'],
+                datasets: [{
+                    label: 'User Verifications',
+                    data: {{ verification_counts | tojson | safe }},
+                    backgroundColor: ['#2ecc71', '#e74c3c', '#f1c40f']
+                }]
+            },
+            options: {
+                responsive: true
+            }
+        });
+    </script>
+</main>
+</body>
+</html>

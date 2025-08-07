@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Complain Form</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='uploads/css/style.css') }}">
+</head>
+<body>
+<nav>
+    <ul>
+        <li><a href="{{ url_for('index') }}">Home</a></li>
+        <li><a href="#">About</a></li>
+        <li><a href="{{ url_for('user_dashboard') }}">Back</a></li>
+        <li><a href="{{ url_for('logout') }}">Logout</a></li>
+    </ul>
+</nav>
+
+<main>
+    <h2>File a Complaint</h2>
+    <form action="{{ url_for('complain') }}" method="POST" enctype="multipart/form-data">
+
+        <label for="location">Location:</label>
+        <select name="location" id="location" required>
+            <option value="" disabled selected>Select your location</option>
+            {% for loc in locations %}
+                <option value="{{ loc }}">{{ loc }}</option>
+            {% endfor %}
+        </select>
+
+        <label for="nearest_iconic_place">Nearest Iconic Place:</label>
+        <input type="text" name="nearest_iconic_place" id="nearest_iconic_place" placeholder="e.g., Red Fort" required>
+
+        <label for="email">Email Address:</label>
+        <input type="email" name="email" id="email" placeholder="e.g., user@example.com" required>
+
+        <label for="phone">Phone Number:</label>
+        <input type="tel" name="phone" id="phone" pattern="[0-9]{10}" placeholder="10-digit mobile number" required>
+
+        <label for="date">Preferred Fix Date:</label>
+        <input type="date" name="date" id="date" required>
+
+        <label for="message">Message:</label>
+        <textarea name="message" id="message" rows="4" required></textarea>
+
+        <label for="photo">Upload Photo:</label>
+        <input type="file" name="photo" id="photo" accept="image/*" required>
+
+        <button type="submit">Preview Complaint</button>
+    </form>
+</main>
+
+<script>
+    // Set minimum date to today
+    window.onload = function () {
+        const today = new Date().toISOString().split('T')[0];
+        document.getElementById('date').setAttribute('min', today);
+    };
+</script>
+</body>
+</html>

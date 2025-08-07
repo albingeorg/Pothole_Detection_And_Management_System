@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Pothole Management</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='uploads/css/style.css') }}">
+    <script>
+        function toggleJurisdiction() {
+            const roleSelect = document.getElementById('role');
+            const jurisdictionDiv = document.getElementById('jurisdictionDiv');
+            jurisdictionDiv.style.display = roleSelect.value === 'admin' ? 'block' : 'none';
+        }
+        window.onload = toggleJurisdiction;
+    </script>
+</head>
+<body>
+    <nav>
+        <ul>
+            <li><a href="{{ url_for('index') }}">Home</a></li>
+            <li><a href="{{ url_for('login') }}">Login</a></li>
+            <li><a href="{{ url_for('logout') }}">Logout</a></li>
+            <li><a href="#">About</a></li>
+        </ul>
+    </nav>
+
+    <main>
+        <h2>Login</h2>
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <ul class="flashes">
+                    {% for message in messages %}
+                        <li>{{ message }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        {% endwith %}
+
+        <form method="POST">
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username" required>
+
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" required>
+
+            <label for="role">Role:</label>
+            <select name="role" id="role" onchange="toggleJurisdiction()">
+                <option value="user">User</option>
+                <option value="admin">Admin</option>
+            </select>
+
+            <div id="jurisdictionDiv" style="display: none;">
+                <label for="jurisdiction">Jurisdiction:</label>
+                <select name="jurisdiction" id="jurisdiction">
+                    <option value="Central Delhi">Central Delhi</option>
+                    <option value="East Delhi">East Delhi</option>
+                    <option value="New Delhi">New Delhi</option>
+                    <option value="North Delhi">North Delhi</option>
+                    <option value="North East Delhi">North East Delhi</option>
+                    <option value="North West Delhi">North West Delhi</option>
+                    <option value="Shahdara">Shahdara</option>
+                    <option value="South Delhi">South Delhi</option>
+                    <option value="South East Delhi">South East Delhi</option>
+                    <option value="South West Delhi">South West Delhi</option>
+                    <option value="West Delhi">West Delhi</option>
+                </select>
+            </div>
+
+            <button type="submit">Login</button>
+        </form>
+    </main>
+</body>
+</html>

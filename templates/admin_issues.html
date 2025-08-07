@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Issues</title>
+    <link rel="stylesheet" href="static\uploads\css\style.css">
+</head>
+<body>
+<nav>
+    <ul>
+        <li><a href="{{ url_for('index') }}">Home</a></li>
+        <li><a href="#">About</a></li>
+        <li><a href="{{ url_for('admin_dashboard') }}">Back</a></li>
+        <li><a href="{{ url_for('logout') }}">Logout</a></li>
+    </ul>
+</nav>
+
+<main>
+    <h2>Issues for {{ session['jurisdiction'] }}</h2>
+    {% if complaints %}
+        <table>
+            <thead>
+    <tr>
+        <th>User</th>
+        <th>Date</th>
+        <th>Location</th>
+        <th>Nearest Iconic Place</th>
+        <th>Email</th>
+        <th>Phone</th>
+        <th>Message</th>
+        <th>Photo</th>
+        <th>Prediction</th>
+        <th>Status</th>
+        <th>User Verified</th>
+    </tr>
+</thead>
+<tbody>
+    {% for c in complaints %}
+    <tr>
+        <td>{{ c.user.username }}</td>
+        <td>{{ c.date or '--' }}</td>
+        <td>{{ c.location or '--' }}</td>
+        <td>{{ c.nearest_iconic_place or '--' }}</td>
+        <td>{{ c.email or '--' }}</td>
+        <td>{{ c.phone or '--' }}</td>
+        <td>{{ c.message }}</td>
+        <td>
+            {% if c.photo %}
+                <img src="{{ url_for('static', filename='uploads/' ~ c.photo) }}" alt="Photo" width="100"><br>
+                <form method="POST" action="{{ url_for('predict_pothole', id=c.id) }}">
+                    <button type="submit">Verify</button>
+                </form>
+            {% else %}
+                No photo
+            {% endif %}
+        </td>
+        <td>{{ c.prediction or 'N/A' }}</td>
+        <td>
+            {% if c.prediction == 'pothole' %}
+                <form method="POST" action="{{ url_for('update_status', id=c.id) }}">
+                    <select name="status" required>
+                        <option value="underprocess" {% if c.status == 'underprocess' %}selected{% endif %}>Under Process</option>
+                        <option value="pothole fixed" {% if c.status == 'pothole fixed' %}selected{% endif %}>Pothole Fixed</option>
+                    </select>
+                    <button type="submit">Update</button>
+                </form>
+            {% else %}
+                --
+            {% endif %}
+        </td>
+        <td>{{ c.user_verified or '--' }}</td>
+    </tr>
+    {% endfor %}
+</tbody>
+
+        </table>
+    {% else %}
+        <p>No complaints in this jurisdiction yet.</p>
+    {% endif %}
+</main>
+</body>
+</html>

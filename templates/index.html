@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pothole Management System</title>
+    <link rel="stylesheet" href="static\uploads\css\style.css">
+</head>
+<body>
+    <nav>
+        <ul>
+            <li><a href="{{ url_for('index') }}">Home</a></li>
+            <li><a href="{{ url_for('login') }}">Login</a></li>
+            <li><a href="{{ url_for('logout') }}">Logout</a></li>
+            <li><a href="#">About</a></li>
+        </ul>
+    </nav>
+    <main>
+        <h1>Welcome to the Pothole Management System</h1>
+        <p>Track and manage pothole issues across Delhi with user-admin coordination and AI-based detection.</p>
+    </main>
+</body>
+</html>

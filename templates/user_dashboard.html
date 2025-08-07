@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Dashboard</title>
+    <link rel="stylesheet" href="static\uploads\css\style.css">
+</head>
+<body>
+    <nav>
+        <ul>
+            <li><a href="{{ url_for('index') }}">Home</a></li>
+            <li><a href="#">About</a></li>
+            <li><a href="{{ url_for('complain') }}">Complain</a></li>
+            <li><a href="{{ url_for('complain_status') }}">Complain Status</a></li>
+            <li><a href="{{ url_for('logout') }}">Logout</a></li>
+        </ul>
+    </nav>
+
+    <main>
+        <h2>Welcome {{ session['username'] }}</h2>
+        <p>Use the navigation bar to file complaints or view their status.</p>
+    </main>
+</body>
+</html>
